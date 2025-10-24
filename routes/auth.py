@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
+from urllib.parse import urlparse
 from models import db, User
 from forms import RegistrationForm, LoginForm
 
@@ -55,7 +56,9 @@ def login():
             
             next_page = request.args.get('next')
             if next_page:
-                return redirect(next_page)
+                parsed_url = urlparse(next_page)
+                if parsed_url.netloc == '' and parsed_url.scheme == '' and not next_page.startswith('//'):
+                    return redirect(next_page)
             
             if user.role == 'admin':
                 return redirect(url_for('admin.dashboard'))
