@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Complaint #{{ complaint.id }} - Admin{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 20px;">
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-primary">← Back to Dashboard</a>
+    {% if complaint.status == 'Submitted' %}
+    <a href="{{ url_for('admin.verify_complaint', complaint_id=complaint.id) }}" class="btn btn-success">Verify Complaint</a>
+    {% elif complaint.status == 'Verified' %}
+    <a href="{{ url_for('admin.assign_contractor', complaint_id=complaint.id) }}" class="btn btn-warning">Assign Contractor</a>
+    {% endif %}
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 style="margin: 0;">Complaint #{{ complaint.id }}</h2>
+    </div>
+    <div class="complaint-details">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3>Complaint Details</h3>
+            <span class="badge badge-{{ complaint.status.lower().replace(' ', '-') }}" style="font-size: 1em;">{{ complaint.status }}</span>
+        </div>
+        
+        <div class="detail-row">
+            <span class="detail-label">Submitted By:</span>
+            <span class="detail-value">{{ complaint.user.username }} ({{ complaint.user.email }})</span>
+        </div>
+        
+        <div class="detail-row">
+            <span class="detail-label">District:</span>
+            <span class="detail-value">{{ complaint.district }}</span>
+        </div>
+        
+        <div class="detail-row">
+            <span class="detail-label">Corporation Type:</span>
+            <span class="detail-value">{{ complaint.corporation_type }}</span>
+        </div>
+        
+        <div class="detail-row">
+            <span class="detail-label">Road Name:</span>
+            <span class="detail-value">{{ complaint.road_name }}</span>
+        </div>
+        
+        {% if complaint.national_highway %}
+        <div class="detail-row">
+            <span class="detail-label">National Highway:</span>
+            <span class="detail-value">{{ complaint.national_highway }}</span>
+        </div>
+        {% endif %}
+        
+        <div class="detail-row">
+            <span class="detail-label">Landmark:</span>
+            <span class="detail-value">{{ complaint.landmark }}</span>
+        </div>
+        
+        {% if complaint.latitude and complaint.longitude %}
+        <div class="detail-row">
+            <span class="detail-label">Location:</span>
+            <span class="detail-value">{{ complaint.latitude }}, {{ complaint.longitude }}</span>
+        </div>
+        {% endif %}
+        
+        <div class="detail-row">
+            <span class="detail-label">Description:</span>
+            <span class="detail-value">{{ complaint.description }}</span>
+        </div>
+        
+        {% if complaint.contractor %}
+        <div class="detail-row">
+            <span class="detail-label">Assigned Contractor:</span>
+            <span class="detail-value">{{ complaint.contractor.username }}</span>
+        </div>
+        {% endif %}
+        
+        {% if complaint.admin_acknowledgement %}
+        <div class="acknowledgement-box">
+            <h4 style="color: var(--success); margin-bottom: 10px;">Admin Acknowledgement</h4>
+            <p>{{ complaint.admin_acknowledgement }}</p>
+        </div>
+        {% endif %}
+        
+        {% if complaint.contractor_acknowledgement %}
+        <div class="acknowledgement-box">
+            <h4 style="color: var(--success); margin-bottom: 10px;">Contractor Acknowledgement</h4>
+            <p>{{ complaint.contractor_acknowledgement }}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

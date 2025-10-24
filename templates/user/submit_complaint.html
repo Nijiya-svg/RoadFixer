@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Submit Complaint - Road Safety Management{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+    <div class="card-header">
+        <h2 style="margin: 0;">Submit Road Safety Complaint</h2>
+    </div>
+    <div style="padding: 20px;">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                <label class="form-label" for="district">District</label>
+                {{ form.district(class="form-control", id="district") }}
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="corporation_type">Corporation Type</label>
+                {{ form.corporation_type(class="form-select", id="corporation_type") }}
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="road_name">Road Name</label>
+                {{ form.road_name(class="form-control", id="road_name") }}
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="national_highway">National Highway (if applicable)</label>
+                {{ form.national_highway(class="form-control", id="national_highway", placeholder="e.g., NH-47") }}
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="landmark">Landmark</label>
+                {{ form.landmark(class="form-control", id="landmark", placeholder="e.g., Near City Hospital") }}
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    <label class="form-label" for="latitude">Latitude</label>
+                    {{ form.latitude(class="form-control", id="latitude", readonly=True) }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="longitude">Longitude</label>
+                    {{ form.longitude(class="form-control", id="longitude", readonly=True) }}
+                </div>
+            </div>
+            
+            <button type="button" onclick="getLocation()" class="btn btn-success" style="width: 100%; margin-bottom: 15px;">
+                📍 Get Current Location
+            </button>
+            
+            <div class="form-group">
+                <label class="form-label" for="description">Description of the Issue</label>
+                {{ form.description(class="form-control", id="description", rows="5", placeholder="Describe the road safety issue in detail...") }}
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Submit Complaint</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

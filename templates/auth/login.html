@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Road Safety Management{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 50px auto;">
+    <div class="card-header">
+        <h2 style="margin: 0;">Login</h2>
+    </div>
+    <div style="padding: 20px;">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                {{ form.username(class="form-control", id="username") }}
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                {{ form.password(class="form-control", id="password") }}
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Login</button>
+        </form>
+        
+        <p style="text-align: center; margin-top: 20px; color: var(--text-secondary);">
+            Don't have an account? <a href="{{ url_for('auth.register') }}">Register here</a>
+        </p>
+        
+        <div style="margin-top: 20px; padding: 15px; background-color: var(--bg-tertiary); border-radius: 4px;">
+            <p style="color: var(--text-secondary); font-size: 0.9em; margin: 0;">
+                <strong>Demo Credentials:</strong><br>
+                Admin: username: <code>admin</code>, password: <code>admin123</code>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

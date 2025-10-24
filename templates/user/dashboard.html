@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}User Dashboard - Road Safety Management{% endblock %}
+
+{% block content %}
+<h1>My Complaints</h1>
+
+<div style="margin: 20px 0;">
+    <a href="{{ url_for('user.submit_complaint') }}" class="btn btn-primary">Submit New Complaint</a>
+</div>
+
+{% if complaints %}
+<div class="card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Location</th>
+                <th>Road Name</th>
+                <th>Corporation Type</th>
+                <th>Status</th>
+                <th>Submitted</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for complaint in complaints %}
+            <tr>
+                <td>{{ complaint.id }}</td>
+                <td>{{ complaint.district }}</td>
+                <td>{{ complaint.road_name }}</td>
+                <td>{{ complaint.corporation_type }}</td>
+                <td><span class="badge badge-{{ complaint.status.lower().replace(' ', '-') }}">{{ complaint.status }}</span></td>
+                <td>{{ complaint.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    <a href="{{ url_for('user.view_complaint', complaint_id=complaint.id) }}" class="btn btn-primary" style="padding: 5px 10px; font-size: 0.9em;">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card">
+    <p style="text-align: center; color: var(--text-secondary);">You haven't submitted any complaints yet.</p>
+    <p style="text-align: center;">
+        <a href="{{ url_for('user.submit_complaint') }}" class="btn btn-primary">Submit Your First Complaint</a>
+    </p>
+</div>
+{% endif %}
+{% endblock %}

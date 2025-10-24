@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Contractor Dashboard - Road Safety Management{% endblock %}
+
+{% block content %}
+<h1>Contractor Dashboard</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ assigned_complaints }}</div>
+        <div class="stat-label">Assigned</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ in_progress_complaints }}</div>
+        <div class="stat-label">In Progress</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ resolved_complaints }}</div>
+        <div class="stat-label">Resolved</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 style="margin: 0;">My Assigned Complaints</h3>
+    </div>
+    {% if complaints %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>District</th>
+                <th>Road Name</th>
+                <th>Landmark</th>
+                <th>Status</th>
+                <th>Assigned</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for complaint in complaints %}
+            <tr>
+                <td>{{ complaint.id }}</td>
+                <td>{{ complaint.district }}</td>
+                <td>{{ complaint.road_name }}</td>
+                <td>{{ complaint.landmark }}</td>
+                <td><span class="badge badge-{{ complaint.status.lower().replace(' ', '-') }}">{{ complaint.status }}</span></td>
+                <td>{{ complaint.assigned_at.strftime('%Y-%m-%d %H:%M') if complaint.assigned_at else 'N/A' }}</td>
+                <td>
+                    <a href="{{ url_for('contractor.view_complaint', complaint_id=complaint.id) }}" class="btn btn-primary" style="padding: 5px 10px; font-size: 0.9em;">View</a>
+                    {% if complaint.status == 'Assigned' %}
+                    <a href="{{ url_for('contractor.acknowledge_complaint', complaint_id=complaint.id) }}" class="btn btn-success" style="padding: 5px 10px; font-size: 0.9em;">Acknowledge</a>
+                    {% elif complaint.status == 'In Progress' %}
+                    <form method="POST" action="{{ url_for('contractor.resolve_complaint', complaint_id=complaint.id) }}" style="display: inline;">
+                        <button type="submit" class="btn btn-warning" style="padding: 5px 10px; font-size: 0.9em;" onclick="return confirm('Are you sure this complaint is resolved?')">Mark Resolved</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center; padding: 20px; color: var(--text-secondary);">No complaints assigned yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
